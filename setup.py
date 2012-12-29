@@ -1,4 +1,7 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(
     name='allocine-wrapper',
@@ -11,6 +14,4 @@ setup(
     license='LICENSE.txt',
     description='Wrapper of Allocine API',
     long_description=open('README.txt').read(),
-    install_requires=[
-    ],
 )
