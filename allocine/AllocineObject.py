@@ -26,7 +26,7 @@ class AllocineObject(object):
       self.__class__.__name__,
       self.code,
       self.__unicode__()
-    )).encode("utf8")
+    ))
 
   def getInfo(self):
     d = self.parent.getInfo(self.__class__.__name__.lower(), self.code)
