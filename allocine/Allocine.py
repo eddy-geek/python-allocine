@@ -12,11 +12,17 @@ class Allocine(object):
   def __init__(self, profile = "small"):
     self.query = AllocineQuery(reply_format="json", profile=profile)
 
-  def search(self, qry, count = 10):
-    reply = self.query.search(qry, count=count)
+  def search(self, qry, count = 10, **args):
+    reply = self.query.search(qry, count=count, **args)
     d = json.loads(reply)
     return self.SearchResults(d["feed"], parent=self)
-
+  
+  def search_movies(self, keywords, count = 10):
+    return self.search(keywords, count, filter="movie")
+  
+  def search_people(self, keywords, count = 10):
+    return self.search(keywords, count, filter="person")
+  
   def getMovie(self, code):
     retval = Movie(code = code, parent=self)
     retval.getInfo(profile)
