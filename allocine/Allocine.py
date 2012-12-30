@@ -1,7 +1,5 @@
-from AllocineApi import AllocineQuery
-from Movie import Movie
-from Person import Person
-from Review import Review
+from .AllocineApi import AllocineQuery
+from .Elements import Movie, Person, Review
 
 import json
 
@@ -37,17 +35,3 @@ class Allocine(object):
   def getInfo(self, type, code):
     query_func = getattr(self.query, "query_" + type)
     return json.loads(query_func(code))
-
-if __name__ == "__main__":
-  p = Allocine().search("robert de niro").persons[0]
-  p.getFilmography()
-  for m in p.filmography:
-    print("%s played in %s" % (p, m.movie))
-  m = Movie(code=32070, parent=Allocine(profile = "large"))
-  m.getInfo()
-  print("searching 'le parrain'")
-  results = Allocine().search("the godfather")
-  movie = results.movies[0]
-  print("first result is %s" % movie)
-  movie.getInfo()
-  print("synopsis of %s : %s" % (movie, movie.synopsisShort))
