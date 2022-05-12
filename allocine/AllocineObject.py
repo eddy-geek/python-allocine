@@ -28,7 +28,7 @@ class AllocineObject(object):
       self.__unicode__()
     ))
 
-  def getInfo(self):
-    d = self.parent.getInfo(self.__class__.__name__.lower(), self.code)
+  def getInfo(self, **args):
+    d = self.parent.getInfo(self.__class__.__name__.lower(), self.code, **args)
     for k,v in d[self.__class__.__name__.lower()].items():
       self.__dict__[k] = v

@@ -25,8 +25,8 @@ class Movie(AllocineObject):
   
   __unicode__ = __str__
 
-  def getInfo(self):
-    super(Movie, self).getInfo()
+  def getInfo(self, **args):
+    super(Movie, self).getInfo(**args)
     if "castMember" in self.__dict__:
       castMember = []
       for i in self.castMember:
