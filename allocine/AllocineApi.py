@@ -32,17 +32,23 @@
 try:
   # Python3
   from urllib.request import urlopen as url_urlopen
-  from urllib.parse import urlencode as url_urlencode
+  from urllib.parse import urlencode as url_urlencode, quote
 except ImportError:
   # Python2
-  from urllib2 import urlopen as url_urlopen
+  from urllib2 import urlopen as url_urlopen, quote
   from urllib import urlencode as url_urlencode
-  
+
+from base64 import b64encode
+from datetime import datetime
+from hashlib import sha1
+import logging
+
+from .settings import *
+logger = logging.getLogger(__name__)
 
 # Parameters for Allocine API v3
 VERSION=3
 BASE_URL = "http://api.allocine.fr/rest/v3/{action}?{params}"
-PARTNER_CODE = "YW5kcm9pZC12M3M"
 ALLOCINE_ENCODING = "utf-8"
 
 class AllocineQuery(object):
@@ -60,10 +66,13 @@ class AllocineQuery(object):
   def query(self, action, **args):
     args.update({
       "partner": PARTNER_CODE,
-      "format": self.reply_format
+      "format": self.reply_format,
+      "sed": datetime.now().strftime('%Y%m%d')
     })
     params = url_urlencode(args)
-    url = BASE_URL.format(action=action, params=params)
+    sig = quote(b64encode(sha1((action + params + ALLOCINE_SECRET_KEY).encode()).digest()), safe='+')
+    url = BASE_URL.format(action=action, params=params + "&sig=" + sig)
+    logger.info("GET %s", url)
     result = url_urlopen(url).read()
     return result.decode(ALLOCINE_ENCODING)
   
